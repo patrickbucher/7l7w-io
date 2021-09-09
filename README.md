@@ -29,6 +29,15 @@ Hier wird dem String `"Hello, World!"` die Nachricht `print` geschickt:
 
 Der _Empfänger_ der Nachricht steht links, die Nachricht steht rechts.
 
+Speichert man folgendes Programm in einer Datei namens `hello.io` ab:
+
+    "Hello, World!" println
+
+Kann man es folgendermassen ausführen:
+
+    $ io hello.io
+    Hello, World!
+
 ## Objekte
 
 Jedes Objekt wird vom ursprünglichen `Object` geklont:
