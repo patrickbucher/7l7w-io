@@ -39,6 +39,14 @@ Jedes Objekt wird vom ursprünglichen `Object` geklont:
 
 Mit dem Operator `:=` findet die initiale Zuweisung statt.
 
+Alle Objekte werden in einem Namensraum namens `Lobby` abgelegt:
+
+    > Lobby
+    ==>  Object_0x559cbf19c770:
+      Lobby            = Object_0x559cbf19c770
+      Person           = Person_0x559cbf4c9250
+      ...
+
 ### Slots
 
 Statt Eigenschaften gibt es _Slots_, welche folgendermassen definiert werden
@@ -57,6 +65,8 @@ Die Slots können mit der Message `slotNames` angezeigt werden:
 
     > Person slotNames
     list(type, name)
+
+### Typen
 
 Objekte, die mit einem Grossbuchstaben anfangen, sind _Typen_ und haben darum
 einen `type`-Slot.
@@ -77,3 +87,64 @@ Objekte, die mit einem Kleinbuchstaben anfangen, sind einfache Objekte ohne
     > peter name := "Peter"
     > peter slotNames
     ==> list(name)
+
+Fragt man den `type`-Slot dennoch ab, wird die Nachricht an das Ursprungsobjekt
+weiterdelegiert:
+
+    > peter type
+    ==> Person
+
+Diese Kette kann beliebig lange sein:
+
+    > Vehicle := Object clone
+    > Ferrari := Vehicle clone
+    > Ferrari country := "Italy"
+    > FerrariEnzo := Ferrari clone
+    > FerrariEnzo horsepower := 660
+    > myFerrariEnzo := FerrariEnzo clone
+    > myFerrariEnzo owner := "Patrick"
+    > myFerrariEnzo owner
+    ==> Patrick
+    > myFerrariEnzo horsepower
+    ==> 660
+    > myFerrariEnzo country
+    ==> Italy
+    > myFerrariEnzo type
+    ==> FerrariEnzo
+
+Mit der `proto`-Message kann man anschauen, auf welchem Prototyp ein Objekt
+basiert:
+
+    > myFerrariEnzo proto
+    ==>  FerrariEnzo_0x559cbf4278c0:
+      horsepower       = 660
+      type             = "FerrariEnzo"
+    > FerrariEnzo proto
+    ==>  Ferrari_0x559cbf44b1e0:
+      country          = "Italy"
+      type             = "Ferrari"
+    > Ferrari proto
+    ==>  Vehicle_0x559cbf3e64f0:
+      drive            = method(...)
+      type             = "Vehicle"
+
+Man sieht auch, auf welcher Ebene welche Slots definiert sind.
+
+### Methoden
+
+Eine Methode wird mit der `method`-Message definiert:
+
+    > Vehicle drive := method("Brum, Brum!" print)
+
+Sie wird aufgerufen, indem man dem Objekt den Methodennamen als Message schickt:
+
+    > myFerrariEnzo drive
+    Brum, Brum!==> Brum, Brum!
+
+Die Definition kann man sich anschauen, indem man die `getSlot`-Message mit
+dem Slotnamen verwendet:
+
+    > myFerrariEnzo getSlot("drive")
+    ==> method(
+        "Brum, Brum!" print
+    )
