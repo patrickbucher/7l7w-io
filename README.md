@@ -293,3 +293,130 @@ Logische Verknüpfungen macht man folgendermassen:
     ==> true
     > "" and 1
     ==> true 
+
+# Kontrollstrukturen
+
+## Verzweigungen
+
+Die Kontrollstrukturen sind als Funktionen umgesetzt.  Die Verzweigung mit `if`
+gibt es in zwei Versionen.
+
+Die erste erwartet eine Bedingung und zwei Messages: die erste wird ausgeführt,
+wenn die Bedingung zutrifft, die zweite im anderen Fall:
+
+    > if(9 > 3, "Of course it is!" println, "That's surprising!" println)
+    Of course it is!
+
+    > if(0, "0 evaluates to true" println, "0 evaluates to false" println)
+    0 evaluates to true
+
+    > if("0" == 0.0, "same" println, "different" println)
+    different
+
+Die zweite besteht aus drei Funktionen: `if`, `then`, `else`:
+
+    > if(9 > 3) then("Of course it is!" println) else("That's surprising!" println)
+    Of course it is!
+
+    > if(0) then("0 evaluates to true" println) else("0 evaluates to false" println)
+    0 evaluates to true
+
+    > if("0" == 0.0) then("same" println) else("different" println)
+    different
+
+## Schleifen
+
+Die einfachste Art der Schleife ist eine Endlosschleife mit `loop`, welche eine
+Message erwartet:
+
+    > loop("hello" println)
+    hello
+    hello
+    hello
+    ...
+    [Ctrl-C]
+
+Die `while`-Schleife erwartet eine Bedingung und eine Message:
+
+    > i := 0
+    > while(i < 3, i println; i = i + 1)
+    0
+    1
+    2
+
+Hier wurden mehrere Messages mit einem Semikolon kombiniert.
+
+Die `for`-Schleife erwartet den Namen einer Zählervariable, einem Startwert
+(inklusiv), einen Endwert (auch inklusiv), einen optionalen Inkrementwert
+(standardmässig `1`) und eine Message:
+
+    > for(i, 0, 3, 1, i println)    // mit Inkrementwert 1
+    0
+    1
+    2
+    3
+    > for(i, 0, 3, i println)       // ohne Inkrementwert
+    0
+    1
+    2
+    3
+
+# Operatoren
+
+Die Operatoren werden in einem Objekt namens `OperatorTable` verwaltet:
+
+    > OperatorTable
+        Operators
+      0   ? @ @@
+      1   **
+      2   % * /
+      3   + -
+      4   << >>
+      5   < <= > >=
+      6   != ==
+      7   &
+      8   ^
+      9   |
+      10  && and
+      11  or ||
+      12  ..
+      13  %= &= *= += -= /= <<= >>= ^= |=
+      14  return
+
+Sie sind in der Reihenfolge ihrer _Präzedenz_ gespeichert, d.h. die
+"Punktoperatoren" `%`, `*` und `/` für Modulo, Multiplikation und Division haben
+eine höhere Präzedenz (2) als die "Strichoperatoren" `+` und `-` für Addition
+und Subtraktion:
+
+    > 2 * 2 + 3 * 3
+    13
+
+    > (2 * 2) + (3 * 3)
+    13
+
+Neue Operatoren können mithilfe der `addOperator`-Message definiert ewrden,
+welche eine Bezeichnung und Präzedenz erwartet:
+
+    > OperatorTable addOperator("inc", 3)
+
+Die Semantik des Operators muss separat in einer Methode definiert werden (`inc` bedeutet
+"inkrement" und erhöht eine Zahl um 1):
+
+    > inc := method(self, self + 1)
+
+Das Objekt `self` bezeichnet das Objekt, auf welcher die Operation ausgeführt
+wird. Hierbeihandelt es sich um einen Operator, der nur mit Operand arbeitet:
+
+    > inc 0
+    1
+    > inc 10
+    11
+
+Operatoren, die mit zwei Operanden arbeiten, werden folgendermassen definiert:
+
+    > OperatorTable addOperator("bigger", 5)
+    > Number bigger := method(other, self > other)
+    > 5 bigger 3
+    true
+    > 13 bigger 100
+    false
