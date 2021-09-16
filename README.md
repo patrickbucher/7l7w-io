@@ -420,3 +420,104 @@ Operatoren, die mit zwei Operanden arbeiten, werden folgendermassen definiert:
     true
     > 13 bigger 100
     false
+
+# Messaging
+
+Jede Message hat die Slots `sender` (der Absender), `target` (der Empfänger) und
+`message` (die Nachricht). Die Nachricht selber verfügt über die Slots
+`arguments` und `name`.
+
+Auf diese Slots kann folgendermassen zugegriffen werden (`messaging.io`):
+
+    agency := Object clone
+    agency messageSender := method(call sender)
+    agency messageTarget := method(call target)
+    agency messageArgs   := method(call message arguments)
+    agency messageName   := method(call message name)
+
+Beispiel:
+
+    $ io -i messaging.io
+    > agency messageSender("foo", 1, :bar)  // Absender-Informationen
+    ==>  Object_0x...
+    > agency messageTarget("foo", 1, :bar)  // Empfänger-Informationen
+    ==>  Object_0x...
+    > agency messageArgs("foo", 1, :bar)    // Argumentliste
+    ==> list("foo", 1, : bar)
+    > agency messageName("foo", 1, :bar)    // Name
+    ==> messageName
+
+## Evaluation von Messages
+
+Bei Sprachen wie Java oder C# werden die Argumente interpretiert, bevor eine
+Methode aufgerufen wird:
+
+    public static int add(int a, int b) {
+        return a + b;
+    }
+
+    add(3 + 7, 2 + 3);
+
+Die `add()`-Methode erhält die Argumente `10` und `5`, nicht die Ausdrücke,
+welche diese Parameter berechnen.
+
+Bei Io werden die Messages unevaluiert an den Empfänger geschickt. Der Empfänger
+kümmert sich dann um deren Evaluierung. Auf diese Weise können
+Kontrollstrukturen programmiert werden, indem die `then`- und `else`-Blöcke erst
+bei Bedarf ausgewertet werden.
+
+## Beispiel: Kontrollstruktur `unless`
+
+`unless` macht das Gegenteil von `if`. Falls die Bedingung (erstes Argument)
+_nicht_ zutrifft, wird der Code vom zweiten Argument ausgeführt, sonst derjenige
+vom zweiten Argument (`unless.io`):
+
+    unless := method(
+        (call sender doMessage(call message argAt(0))) ifFalse(
+         call sender doMessage(call message argAt(1))) ifTrue(
+         call sender doMessage(call message argAt(2)))
+    )
+
+Beispiel:
+
+    $ io -h unless.io
+    > unless(1 == 2, "One is not two" println, "One is two" println)
+    One is not two
+    > unless(1 == 1, "One is not one" println, "One is one" println)
+    One is one
+
+Mit `call sender` gelangt man an die lokalen Variablen des Absenders. Mit
+`doMessage` wird ein Argument evaluiert. Die Kette `call sender doMessage`
+evaluiert eine Message im Kontext (d.h. im Gültigkeitsbereich) des Senders.
+
+Mit `call message` gelangt man an die empfangene Message. Mit `argAt(i)` kann
+das Argument bei Index `i` (0-basiert) abgefragt werden.
+
+Ein Boolean-Wert (`true` oder `false`) unterstützt die beiden Messages `ifTrue`
+und `ifFalse`. Ist der Empfänger `true`, evaluiert `ifTrue` den Parameter, Ist
+der Empfänger `false`, evaluiert `ifFalse` den Parameter.
+
+    > true ifTrue("is true" println)
+    is true
+    ==> true
+
+    > false ifTrue("is true" println)
+    ==> false
+
+    > false ifFalse("is false" println)
+    is false
+    ==> false
+
+    > true ifFalse("is false" println)
+    ==> true
+
+Der Rückgabewert ist hier immer der Wert des Empfängers, wodurch `ifTrue` und
+`ifFalse` verkettet werden können:
+
+    > true ifTrue("is true" println) ifFalse("is false" println)
+    is true
+    ==> true
+
+    > false ifTrue("is true" println) ifFalse("is false" println)
+    is false
+    ==> false
