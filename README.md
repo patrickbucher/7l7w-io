@@ -361,6 +361,21 @@ Die `for`-Schleife erwartet den Namen einer Zählervariable, einem Startwert
     2
     3
 
+Die Einträge einer Liste lasen sich am besten mit der `foreach`-Schleife
+abarbeiten. Diese erwartet drei Parameter: Die Zählervariable (Index), die
+Variable für die einzelnen Listeneinträge (Wert) und die Aktion, die für jede
+Iteration auszuführen ist.
+
+    > names := list("Alice", "Dilbert", "Wally")
+    > names foreach(index, name, index println)
+    0
+    1
+    2
+    > names foreach(index, name, name println)
+    Alice
+    Dilbert
+    Wally
+
 # Operatoren
 
 Die Operatoren werden in einem Objekt namens `OperatorTable` verwaltet:
