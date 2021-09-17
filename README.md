@@ -375,6 +375,10 @@ Iteration auszuführen ist.
     Alice
     Dilbert
     Wally
+    > names foreach(index, name, writeln(index, ": ", name))
+    0: Alice
+    1: Dilbert
+    2: Wally
 
 # Operatoren
 
