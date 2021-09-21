@@ -35,6 +35,34 @@ TwoDimensionalList output := method(
             " " print)
         " " println))
 
+TwoDimensionalList saveToFile := method(
+    filename,
+    file := File clone open(filename)
+    for(row, 0, self data size - 1,
+        for(col, 0, self data at(row) size - 1,
+            file write(self get(row, col) asString, " "))
+        file write("\n"))
+    file close)
+
+readFromFile := method(
+    filename,
+    file := File clone open(filename)
+    lines := file readLines
+    rows := list()
+    lines foreach(
+        line,
+        cols := list()
+        line split foreach(
+            token,
+            cols append(token asNumber))
+        rows append(cols))
+    matrix := TwoDimensionalList clone
+    matrix dim(rows size, rows at(0) size)
+    for(r, 0, rows size - 1,
+        for(c, 0, rows at(0) size - 1,
+            matrix set(r, c, rows at(r) at(c))))
+    matrix)
+
 matrix := TwoDimensionalList clone
 matrix dim(3, 4)
 matrix set(0, 0, 1)
@@ -51,8 +79,10 @@ matrix set(2, 2, 11)
 matrix set(2, 3, 12)
 
 "original" println
+matrix := readFromFile("matrix.txt")
 matrix output
 
 "transposed" println
 matrix transpose
 matrix output
+matrix saveToFile("matrix.txt")
