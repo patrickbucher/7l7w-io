@@ -63,21 +63,6 @@ readFromFile := method(
             matrix set(r, c, rows at(r) at(c))))
     matrix)
 
-matrix := TwoDimensionalList clone
-matrix dim(3, 4)
-matrix set(0, 0, 1)
-matrix set(0, 1, 2)
-matrix set(0, 2, 3)
-matrix set(0, 3, 4)
-matrix set(1, 0, 5)
-matrix set(1, 1, 6)
-matrix set(1, 2, 7)
-matrix set(1, 3, 8)
-matrix set(2, 0, 9)
-matrix set(2, 1, 10)
-matrix set(2, 2, 11)
-matrix set(2, 3, 12)
-
 "original" println
 matrix := readFromFile("matrix.txt")
 matrix output
