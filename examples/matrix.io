@@ -1,6 +1,6 @@
-TwoDimensionalList := Object clone
+Matrix := Object clone
 
-TwoDimensionalList dim := method(
+Matrix dim := method(
     rows, cols,
     self data := list()
     for(r, 0, rows - 1,
@@ -9,18 +9,18 @@ TwoDimensionalList dim := method(
         tmp append(0))
     self data append(tmp)))
 
-TwoDimensionalList set := method(
+Matrix set := method(
     row, col, value,
     self data at(row) atPut(col, value))
 
-TwoDimensionalList get := method(
+Matrix get := method(
     row, col,
     self data at(row) at(col))
 
-TwoDimensionalList transpose := method(
+Matrix transpose := method(
     rows := self data size
     cols := self data at(0) size
-    t := TwoDimensionalList clone
+    t := Matrix clone
     t dim(cols, rows)
     for(row, 0, rows - 1,
         for(col, 0, cols - 1,
@@ -28,14 +28,14 @@ TwoDimensionalList transpose := method(
            t set(col, row, val)))
     self data := t data)
 
-TwoDimensionalList output := method(
+Matrix output := method(
     for(i, 0, self data size - 1,
         for(j, 0, self data at(i) size - 1,
             self get(i, j) print
             " " print)
         " " println))
 
-TwoDimensionalList saveToFile := method(
+Matrix saveToFile := method(
     filename,
     file := File clone open(filename)
     for(row, 0, self data size - 1,
@@ -56,7 +56,7 @@ readFromFile := method(
             token,
             cols append(token asNumber))
         rows append(cols))
-    matrix := TwoDimensionalList clone
+    matrix := Matrix clone
     matrix dim(rows size, rows at(0) size)
     for(r, 0, rows size - 1,
         for(c, 0, rows at(0) size - 1,
@@ -70,4 +70,6 @@ matrix output
 "transposed" println
 matrix transpose
 matrix output
+
+matrix transpose
 matrix saveToFile("matrix.txt")
