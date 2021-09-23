@@ -18,3 +18,6 @@ fib_iter := method(
           i = i + 1)
     acc
 )
+
+fib(30) println
+fib_iter(30) println

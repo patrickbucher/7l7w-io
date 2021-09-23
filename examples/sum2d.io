@@ -1,5 +1,3 @@
-numbers := list(list(1, 2, 3), list(4, 5, 6), list(7, 8, 9))
-
 sum2d := method(
     arr := call evalArgAt(0)
     acc := 0
@@ -12,3 +10,6 @@ sum2d := method(
             acc = acc + element))
     acc
 )
+
+numbers := list(list(1, 2, 3), list(4, 5, 6), list(7, 8, 9))
+sum2d(numbers) println
