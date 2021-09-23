@@ -17,7 +17,7 @@ interaktiv ausführen:
 
     $ io
 
-## 3. Matrix erweitern (20-30 min.)
+## 3. Matrix erweitern
 
 Betrachten Sie sich die Datei `matrix.io` im Verzeichnis `examples`. Sie werden
 den Code in den nächsten Schritten erweitern. Führen Sie den Code nach jeder
@@ -117,3 +117,7 @@ nachvollziehen:
 
     1 2 3   3 5
     4 3 1   7 9
+
+Die Elemente einer Zeile (z.B. `1 2 3`) werden paarweise mit den Elementen jeder
+Spalte (z.B. `1 1 0`) multipliziert und dann aufsummiert (z.B. `1*1 + 2*1 + 3*0
+= 3`).
