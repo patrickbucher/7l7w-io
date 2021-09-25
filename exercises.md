@@ -37,7 +37,7 @@ Möglichkeiten. Auf der offiziellen Webseite gibt es
 2. Im entpackten Verzeichnis können Sie nun die Datei mit der Endung `.deb`
    installieren:
     1. Entweder per GUI: Rechtsklick, `"Mit Software-Installation öffnen"`
-    2. Oder per Kommandozeile: `sudo dpkg -i IoLanguage-*.dev`
+    2. Oder per Kommandozeile: `sudo dpkg -i IoLanguage-*.deb`
 3. Führen Sie `io` im Terminal aus.
 
 ## macOS
